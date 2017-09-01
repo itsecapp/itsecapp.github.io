@@ -1,0 +1,135 @@
+A1 - Injection
+  1/  Laquelle de ces affirmations est fausse ?
+    a/  Un attaquant découvrant une injection SQL peut être en mesure d'écrire des fichiers sur le système.
+    b/  Un fichier XML fourni par l'utilisateur n'est pas spécialement dangereux.
+    C/  Un attaquant peut exécuter du code à distance avec une injection sur le SGDB NoSQL.
+   Il est possible d'exécuter du code à distance grâce à un fichier XML malveillant (XML eXternal Entity, ou XXE).
+  2/  Quelle vulnérabilité est présente dans ce code ? ![Injection](injection.png)
+    a/  Cross-Site Scripting (XSS).
+    B/  Header injection.
+    c/  SQL Injection.
+   Il ne s'agit pas d'une XSS car le header Content-Type indique qu'il s'agit d'un fichier texte brut. On peut en revanche injecter des headers lors de l'appel de la fonction header().
+
+A2 - Broken Authentication and Session Management
+  1/  Un identifiant de session a été volé ! Quelle est la meilleure manière de le détecter ?
+    a/  Je vérifie le User-Agent envoyé afin de m'assurer qu'il s'agit du même que celui utilisé lors de la connexion.
+    b/  J'ai restreint la session à l'adresse IP utilisée lors de la connexion, ainsi l'attaquant ne pourra pas l'usurper.
+    c/
+  2/  Je veux générer un nouvel identifiant de session unique :
+    a/  J'utilise des méchanismes telle que la classe `Random` en C#.
+    B/  Je préfère un CSPRNG (Cryptographically Secure Pseudo-Random Number Generator).
+    c/  J'utilise les informations du client (IP, User-Agent...) et je hash le tout.
+   Il est nécessaire d'utiliser une méthode forte cryptographiquement (que n'est pas la classe Random), et indépendante des informations fournies par le client, afin d'éviter que l'identifiant soit prédictible.
+
+A3 - Cross-Site Scripting
+  1/  Quels peuvent être les impacts d'une attaque XSS ?
+    A/  Injecter du code PHP pour exécuter des commandes sur le serveur.
+    b/  Faire du phishing afin de récupérer le mot de passe.
+    c/  Voler le compte de l'utilisateur grâce à ses cookies.
+   Une XSS est du code injecté sur la page envoyée au client, il est donc possible de voler les cookies, ou injecter du code imitant un formulaire de connexion.
+  2/  Quel header HTTP permet de limiter l'impact des XSS ?
+    a/  Upgrade-Insecure-Requests
+    B/  Content-Security-Policy
+    c/  Authorization
+   Le header Content-Security-Policy (CSP) permet de restreindre dans quelles conditions le code présent sur la page doit-il être exécuté (whitelist des domaines autorisés, restriction au niveau de la balise <script>, etc...).
+
+A4 - Broken Access Control
+  1/ Que peut faire un attaquant avec ce code Java ?
+       pstmt.setString(1, request.getParameter("acct"))
+       ResultSet results = pstmt.executeQuery();
+    a/ Rien, aucune vulnérabilité n'étant présente.
+    b/ Il a la possibilité de se connecter en tant que n'importe quel utilisateur.
+    c/ Il peut faire du phishing en redirigeant l'url.
+  2/  Qu'est-ce que le Directory Traversal ?
+    a/  Une faille sur l'Active Directory permettant d'accéder aux données de tous les comptes connectés.
+    b/  Cela correspond aux caractères ".." permettant de remonter dans l'arborescence sur un système de fichiers.
+    c/  Une méthode d'authentification pour accéder à un répertoire sur Windows.
+
+A5 - Security Misconfiguration
+  1/  Le fait de pouvoir accéder à la liste des fichiers contenus dans un repértoire sur un site web est appelé :
+    a/  Directory Listing
+    b/  File Hooking
+    c/  Path Truncation
+  2/ J'implémente un serveur web sur une machine Debian :
+    a/ Je laisse les droits de mes fichiers configurés avec l'utilisateur root.
+    b/ J'installe MySQL en laissant les paramètres par défaut.
+    c/ Je vérifie que les droits de mes fichiers sont à 664 et que ceux de mes dossiers sont à 755.
+
+A6 - Sensitive Data Exposure
+  1/  Quel est l'algorithme le plus robuste pour chiffrer un fichier ?
+    a/  SHA-256, sans oublier d'utiliser un sel secret.
+    b/  AES en mode ECB avec une clef de 192 bits.
+    C/  L'algorithme Rijndael en mode CBC.
+   Chiffrer un fichier signifie qu'on veut pouvoir le déchiffrer, SHA-256 est donc à exclure. L'algorithme de Rijndael est l'autre nom d'AES, le mode ECB est obsolète et à proscrire.
+  2/  Dans une base de données, un mot de passe se doit d'être...
+    A/  Hashé, avec un algorithme tel que bcrypt.
+    b/  Chiffré, en utilisant AES avec une clé de 256 bits.
+    c/  Obfusqué, en l'encodant en base64.
+   Un mot de passe n'a pas besoin d'être connu, ainsi l'utilisation d'un hash est la plus appropriée.
+
+A7 - Insufficient Attack Protection
+  1/  Quel module Apache, Nginx et IIS permet de faire office de WAF (Web Application Firewall) ?
+    A/  mod_security
+    b/  .htaccess
+    c/  Squid
+  2/  Quelle proposition est fausse ?
+    a/  Un captcha permet notamment de limiter l'impact des attaques par force brute sur un formulaire de connexion.
+    b/  Un captcha est un test de Turing.
+    c/  Un captcha force l'utilisation de javascript.
+
+A8 - Cross-Site Request Forgery (CSRF)
+  1/  Quelle autre attaque peut-être utilisée afin de contourner des protections mises en place contre les CSRF ?
+    a/  Injection SQL
+    b/  XSS
+    c/  Buffer overflow
+   Les failles XSS sont très puissantes, et permettent de contourner beaucoup de mécanismes. Le serveur n'est en effet pas en mesure de savoir si les requêtes effectuées avec une faille XSS sont légitimes ou non.
+  2/ Que faire pour se protéger des CSRF ?
+    a/  Instaurer un captcha.
+    b/  Vérifier si le header X-Requested-With a la valeur XMLHttpRequest.
+    c/  Mettre en place un mécanisme de token aléatoire généré à chaque fois qu'un formulaire est affiché.
+
+
+A9 - Using Components with Known Vulnerabilities
+  1/  L'attaque Heartbleed consiste à :
+    A/  Exploiter une vulnérabilité sur OpenSSL afin de lire la mémoire du serveur (dont la clef privée).
+    b/  Utiliser un bug sur le parsing du shell bash, permettant une exécution de code à distance avec une variable d'environnement.
+    c/  Intercepter une connexion SSL et profiter d'une faille cryptographique, permettant de déchiffrer les informations échangées.
+   Le bug sur le parsing shell correspond à la vulnérabilité Shellshock découverte en septembre 2014. POODLE est une faille sur SSLv3 fonctionnant grâce à un attaque de l'homme du milieu. Cette dernière a été découverte en octobre 2014.
+  2/ Parmi ces versions de Windows, lesquelles sont obsolètes ?
+    a/  Windows 2003
+    b/  Windows server 2008
+    c/  Windows XP
+
+A10 - Underprotected APIs
+  1/  Il est obligatoire d'utiliser une connexion chiffrée afin d'utiliser OAuth 1.0 de manière sécurisée.
+    a/ Vrai
+    B/ Faux
+   OAuth 1.0 a été conçu afin de permettre de ne pas utiliser de connexion sécurisée entre le programme et l'API. Cependant, cela n'est pas une raison pour ne pas chiffrer toutes les connexions !
+  2/  Quelle(s) proposition(s) est (sont) vraie(s) ?
+    a/  Le header HTTP Authentication comporte des identifiants chiffrés en AES.
+    b/  HTTPS permet d'éviter les attaques de type Man In the Middle.
+    c/  Le header Access-Control-Allow-Origin permet de restreindre la liste des domaines d'où peuvent venir des requêtes.
+
+
+A11 - Unvalidated Redirects and Forwards
+  1/  La meilleure façon de prévenir une vulnérabilité Open Redirect est :
+    A/  De comparer le lien donné à une whitelist prédéfinie.
+    b/  De vérifier le Referer.
+    c/  D'enlever tout ce qui précède le caractère ':' (https, http, ftp...).
+   Il est conseillé d'utiliser une whitelist lors de la gestion d'une redirection. Il n'est pas nécessaire de renseigner tous les liens possibles, on peut uniquement regarder sur quel domaine est-on en train de rediriger l'utilisateur.
+  2/  Quelle utilité peut avoir une redirection non validée pour un attaquant ?
+    a/  Accéder aux ressources internes du serveur via le pseudo protocole file://.
+    b/  Gagner la confiance des victimes de phishing en donnant un lien vers le site légitime renvoyant vers une copie.
+    c/
+
+A12 - Malicious Filesmais
+  1/  Une manière fiable de vérifier qu'un fichier correspond au type attendu est...
+    a/  De vérifier le type MIME envoyé lors de l'upload.
+    B/  Faire une opération quelconque sur le fichier et vérifier qu'il n'y a pas d'erreurs.
+    c/  Lire les premiers caractères du fichier afin de regarder si le header correspond au format attendu.
+   Il est préférable d'effectuer une opération sur le fichier (redimensionner une image, lire le titre du document Word...), cela permet de savoir de manière fiable si le fichier correspond au format attendu. Attention à ne pas faire n'importe quoi cependant !
+  2/  Comment peut-on mettre du code PHP dans une image PNG ?
+    a/  Il suffit de graphiquement écrire le code sur l'image.
+    b/  Il est possible de l'insérer dans la partie IDAT.
+    c/  Ca n'est pas possible, l'image serait corrompue.
+   Les images PNG comportent des sections nommées IDAT, qui correspondent à des données compressées relatives à l'image. Il est possible d'abuser de ces données afin d'y insérer du code PHP (par exemple <?php system($_GET["cmd"]); ?>).

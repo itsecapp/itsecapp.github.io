@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <link rel="stylesheet"
+    href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+    <script
+    src="https://code.jquery.com/jquery-3.2.1.min.js"
+    integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+    crossorigin="anonymous"></script>
+      <script
+    src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <title>Tests</title>
+    <link rel="stylesheet" href="main.css">
+    <script src="quizz.js"></script>
+  </head>
+  <body>
+    <div class="jumbotron">
+      <div class="container">
+        <h1>
+          <span class="sc-red">S</span>ecure
+          <span class="sc-red">C</span>oding
+          <span class="sc-red">G</span>uidelines
+        </h1>
+        <p>Des quizzs afin de tester vos connaissances sur les failles rencontr&eacute;es.</p>
+      </div>
+    </div>
+    <div class="container" id="quizzs">
+      <div id="winmsg">
+        <div class="alert alert-success" role="alert">
+          <button type="button" class="close" id="close" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          <strong>Bravo !</strong>
+          Vous avez résolu le quizz.
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-6 col-md-4" data-choice="1">
+          <h2 class="sc-title">A1<br>Injection</h2>
+        </div>
+        <div class="col-sm-6 col-md-4" data-choice="2">
+          <h2 class="sc-title">A2<br>Broken Authentication and Session Management</h2>
+        </div>
+        <div class="col-sm-6 col-md-4" data-choice="3">
+          <h2 class="sc-title">A3<br>Cross-Site Scripting (XSS)</h2>
+        </div>
+        <div class="col-sm-6 col-md-4" data-choice="4">
+          <h2 class="sc-title">A4<br>Broken Access Control</h2>
+        </div>
+        <div class="col-sm-6 col-md-4" data-choice="5">
+          <h2 class="sc-title">A5<br>Security Misconfiguration</h2>
+        </div>
+        <div class="col-sm-6 col-md-4" data-choice="6">
+          <h2 class="sc-title">A6<br>Sensitive Data Exposure</h2>
+        </div>
+        <div class="col-sm-6 col-md-4" data-choice="7">
+          <h2 class="sc-title">A7<br>Insufficient Attack Protection</h2>
+        </div>
+        <div class="col-sm-6 col-md-4" data-choice="8">
+          <h2 class="sc-title">A8<br>Cross-Site Request Forgery (CSRF)</h2>
+        </div>
+        <div class="col-sm-6 col-md-4" data-choice="9">
+          <h2 class="sc-title">A9<br>Using Components with Known Vulnerabilities</h2>
+        </div>
+        <div class="col-sm-6 col-md-4" data-choice="10">
+          <h2 class="sc-title">A10<br>Underprotected APIs</h2>
+        </div>
+        <div class="col-sm-6 col-md-4" data-choice="11">
+          <h2 class="sc-title">A11<br>Unvalidated Redirects and Forwards</h2>
+        </div>
+        <div class="col-sm-6 col-md-4" data-choice="12">
+          <h2 class="sc-title">A12<br>Malicious Files</h2>
+        </div>
+      </div>
+    </div>
+    <hr>
+    <div class="container" id="quizz">
+      <h1 class="sc-title"></h1>
+      <div id="questions"></div>
+    </div>
+    <div id="validate">
+      <button type="button" class="btn btn-success btn-lg">
+        <span class="glyphicon glyphicon-ok"></span>
+      </button>
+    </div>
+  </body>
+</html>

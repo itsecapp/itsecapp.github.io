@@ -1,0 +1,48 @@
+div[data-choice] {
+  height: 200px;
+  cursor: pointer;
+  transition: background 0.25s ease-in-out;
+}
+div[data-choice]:hover {
+  background: #eee;
+}
+.sc-title {
+  text-align: center;
+}
+.sc-title::first-line, .sc-red {
+  color: #e23a05;
+}
+.sc-title::first-line {
+  font-weight: bold;
+}
+.hidden {
+  display: none;
+}
+.visible {
+  display: block;
+}
+div#quizz div#questions ul li {
+  transition: background 0.25s ease-in-out;
+  cursor: pointer;
+}
+div#quizz div#questions ul li:not(.active):hover {
+  background: #eee;
+}
+div#validate {
+  z-index: 1337;
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  margin-right: 10px;
+  margin-bottom: 10px;
+  display: none;
+}
+div#winmsg, div#quizz {
+  display: none;
+}
+div#winmsg {
+  padding: 20px;
+  width: 500px;
+  text-align: center;
+  margin: 0 auto;
+}
