@@ -43,7 +43,7 @@ const template = [
     ] }
 ]
 
-var quizzs = [
+const quizzs = [
   [
     {
       "question": "Laquelle de ces affirmations est fausse ?",
@@ -99,9 +99,8 @@ var quizzs = [
 
 function getQuizz(el)
 {
-  quizzState.quizz = quizzs[parseInt($(this).attr("data-choice")) - 1];
-  if (!quizzState.quizz)
-    return;
+  let quizzId = /^A([1-9]\d*)<br>/.exec($(this).children("h2").html())[1];
+  quizzState.quizz = quizzs[parseInt(quizzId) - 1];
   $("div#winmsg").fadeOut(ANIM_DURATION);
   quizzState.nanswers = 0;
 
@@ -143,19 +142,19 @@ function getQuizz(el)
 
 function getQuestion(div)
 {
-  let match = /^\s*Question (\d+)<br>/.exec($(div).children("h2").html());
+  let match = /^\s*Question ([1-9]\d*)<br>/.exec($(div).children("h2").html());
   if (!match)
   {
     console.error("wat");
     return null;
   }
   let index = parseInt(match[1]);
-  if (index > quizzState.quizz.length || index === 0)
+  if (index > quizzState.quizz.length)
   {
     console.log("uh");
     return null;
   }
-  return quizzState.quizz[parseInt(match[1]) - 1];
+  return quizzState.quizz[index - 1];
 }
 
 function setActive(choice, isActive)
@@ -192,7 +191,7 @@ function validateQuizz(event)
 
   $("div#quizz div#questions div.col-md-6").each(function() {
     var $this = $(this);
-    if ($this.children("div.alert.alert-info").length === 1)
+    if ($this.hasClass("answered"))
       return;
     var question = getQuestion($this);
     if (question === null)
@@ -228,6 +227,7 @@ function validateQuizz(event)
     if (!hasErrors &&
         $this.find("ul li.list-group-item-success").length === question.answers)
     {
+      $this.addClass("answered");
       if (question["explanation"] !== null)
       {
         $("<div class='alert alert-info'>")
@@ -237,9 +237,26 @@ function validateQuizz(event)
       $this.find("ul li").unbind("click");
     }
   });
+
+  if ($("div#quizz div#questions div.answered").length === quizzState.quizz.length)
+  {
+    $("div#scroll").fadeIn(ANIM_DURATION);
+    $("div#validate").fadeOut(ANIM_DURATION);
+  }
+}
+
+function scrollTop()
+{
+  $("html, body").animate({
+    scrollTop: $("div#quizzs div.row").offset().top
+  }, ANIM_DURATION);
+  $("div#scroll").fadeOut(ANIM_DURATION, function() {
+    $("div#quizz").fadeOut(ANIM_DURATION);
+  });
 }
 
 $(function() {
-  $("div[data-choice]").click(getQuizz);
+  $("div.choice").click(getQuizz);
   $("div#validate button").click(validateQuizz);
+  $("div#scroll button").click(scrollTop);
 });

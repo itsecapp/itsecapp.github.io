@@ -1,9 +1,9 @@
-div[data-choice] {
+div.choice {
   height: 200px;
   cursor: pointer;
   transition: background 0.25s ease-in-out;
 }
-div[data-choice]:hover {
+div.choice:hover {
   background: #eee;
 }
 .sc-title {
@@ -28,14 +28,18 @@ div#quizz div#questions ul li {
 div#quizz div#questions ul li:not(.active):hover {
   background: #eee;
 }
-div#validate {
-  z-index: 1337;
-  position: fixed;
-  bottom: 0;
-  right: 0;
-  margin-right: 10px;
-  margin-bottom: 10px;
+div#validate, div#scroll {
   display: none;
+  bottom: 0;
+  position: fixed;
+  z-index: 1337;
+  margin: 10px;
+}
+div#validate {
+  right: 0;
+}
+div#scroll {
+  left: 0;
 }
 div#winmsg, div#quizz {
   display: none;
