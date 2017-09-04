@@ -45,22 +45,37 @@ const template = [
 
 var quizzs = [
   [
-    { "question": "Laquelle de ces affirmations est fausse ?",
-      "explanation": null,
+    {
+      "question": "Laquelle de ces affirmations est fausse ?",
+      "explanation": "Il est possible d'exécuter du code à distance grâce à un fichier XML malveillant (XML eXternal Entity, ou XXE).",
       "answers": 1,
       "choices": [
         "Un attaquant peut exécuter du code à distance avec une injection sur le SGDB NoSQL.",
         "Un fichier XML fourni par l'utilisateur n'est pas spécialement dangereux.",
         "Un attaquant découvrant une injection SQL peut être en mesure d'écrire des fichiers sur le système."
-      ] },
-    { "question": "<img src='injection.png' width='100%' alt='Injection'><br>Quelle vulnérabilité est présente dans ce code ?",
-      "explanation": null,
+      ]
+    },
+    {
+      "question": "<img src='injection.png' width='100%' alt='Injection'><br>Quelle vulnérabilité est présente dans ce code ?",
+      "explanation": "Il ne s'agit pas d'une XSS car le header Content-Type indique qu'il s'agit d'un fichier texte brut. On peut en revanche injecter des headers lors de l'appel de la fonction header().",
       "answers": 1,
-      "choices": [ "Header injection.",
-                   "Cross-Site Scripting (XSS).",
-                   "SQL injection." ] }
+      "choices": [
+        "Header injection.",
+         "Cross-Site Scripting (XSS).",
+         "SQL injection."
+       ]
+     }
   ],
-  template,
+  [
+    {
+      "question": "Choose A and B",
+      "explanation": "Well done.",
+      "answers": 2,
+      "choices": [
+        "A", "B", "C"
+      ]
+    }
+  ],
   [
     { "question": "Quelle action est impossible à effectuer avec une XSS ?",
       "explanation": null,
@@ -103,10 +118,7 @@ function getQuizz(el)
     let choices = question["choices"];
     var genchoices = [];
     question["choices"].forEach(function(choice, index) {
-      genchoices.push('<li class="list-group-item" data-active="false"\
-                        data-valid="' +
-                        (index < quizzState.quizz.answers ? "true" : "false") +
-                        '">\
+      genchoices.push('<li class="list-group-item">\
                         ' + choice + '\
                       </li>');
     });
@@ -129,42 +141,44 @@ function getQuizz(el)
   }, ANIM_DURATION);
 }
 
-function getQuestion(li)
+function getQuestion(div)
 {
-  let html = $(li).parent().parent().html();
-  for (let i = 0; i < quizzState.quizz.length; ++i)
+  let match = /^\s*Question (\d+)<br>/.exec($(div).children("h2").html());
+  if (!match)
   {
-    if (html.indexOf(quizzState.quizz[i].question) != -1)
-      return quizzState.quizz[i];
+    console.error("wat");
+    return null;
   }
-  return null;
+  let index = parseInt(match[1]);
+  if (index > quizzState.quizz.length || index === 0)
+  {
+    console.log("uh");
+    return null;
+  }
+  return quizzState.quizz[parseInt(match[1]) - 1];
 }
 
 function setActive(choice, isActive)
 {
   $(choice)
-    .attr("data-active", (!!isActive).toString())
     .attr("class", "list-group-item");
   if (isActive)
-    $(choice).addClass("active")
+    $(choice).addClass("active");
 }
 
 function clickChoice()
 {
-  if ($(this).attr("data-active") === "true")
+  let isActive = ($(this).hasClass("active") || $(this).hasClass("list-group-item-danger"));
+  $(this).parent().children("li.list-group-item-danger").each(function() {
+    setActive(this, false);
+  });
+  if (isActive)
   {
     setActive(this, false);
     return;
   }
-  let question = getQuestion(this);
-  let isCorrect = false;
-  for (let i = 0; i < question.answers && !isCorrect; ++i)
-  {
-    if ($(this).html().indexOf(question.choices[i]) != -1)
-      isCorrect = true;
-  }
 
-  if ($(this).parent().children("li[data-active=true]").length == 0)
+  if ($(this).parent().children("li.active").length == 0)
     ++quizzState.nanswers;
   if (quizzState.nanswers === quizzState.quizz.length)
     $("div#validate").fadeIn(ANIM_DURATION);
@@ -176,41 +190,56 @@ function validateQuizz(event)
 {
   event.stopPropagation();
 
-  var error = false;
-  $("div#quizz div#questions ul li[data-active=true]:not(.list-group-item-success)").each(function() {
-    $(this).removeClass("active");
-
-    let state = "success";
-    if ($(this).attr("data-valid") === "false")
+  $("div#quizz div#questions div.col-md-6").each(function() {
+    var $this = $(this);
+    if ($this.children("div.alert.alert-info").length === 1)
+      return;
+    var question = getQuestion($this);
+    if (question === null)
     {
-      error = true;
-      state = "danger";
+      console.log("wth");
+      return;
     }
-    else
+    var hasErrors = ($this.find("ul li.list-group-item-danger").length !== 0);
+
+    $this.find("ul li.active").each(function() {
+      setActive(this, false);
+
+      var isCorrect = false;
+      for (let i = 0; i < question.answers && !isCorrect; ++i)
+      {
+        if ($(this).html().indexOf(question.choices[i]) != -1)
+          isCorrect = true;
+      }
+      let state = null;
+      if (isCorrect)
+      {
+        state = "success";
+        $(this).unbind("click");
+      }
+      else
+      {
+        state = "danger";
+        hasErrors = true;
+      }
+      $(this).addClass("list-group-item-" + state);
+    });
+
+    if (!hasErrors &&
+        $this.find("ul li.list-group-item-success").length === question.answers)
     {
-      var $parent = $(this).parent();
-      var explanation = null;
-      quizzState.quizz.forEach(function(question, index) {
-        if ($parent.parent().html().indexOf(question["question"]) != -1)
-          explanation = question["explanation"];
-      });
-      if (explanation !== null)
+      if (question["explanation"] !== null)
       {
         $("<div class='alert alert-info'>")
-          .text(explanation)
-          .insertBefore($parent);
+          .text(question["explanation"])
+          .insertBefore($this.find("ul"));
       }
-      $parent.children().unbind("click");
+      $this.find("ul li").unbind("click");
     }
-
-    $(this).addClass("list-group-item-" + state);
   });
 }
 
 $(function() {
   $("div[data-choice]").click(getQuizz);
   $("div#validate button").click(validateQuizz);
-  $("button#close").click(function() {
-    $("div#winmsg").fadeOut(ANIM_DURATION);
-  })
 });
