@@ -4,13 +4,13 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet"
-    href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+     href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script
-    src="https://code.jquery.com/jquery-3.2.1.min.js"
-    integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
-    crossorigin="anonymous"></script>
-      <script
-    src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+     src="https://code.jquery.com/jquery-3.2.1.min.js"
+     integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+     crossorigin="anonymous"></script>
+    <script
+     src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <title>Tests</title>
     <link rel="stylesheet" href="main.css">
     <script src="quizz.js"></script>
@@ -28,40 +28,40 @@
     </div>
     <div class="container" id="quizzs">
       <div class="row">
-        <div class="col-sm-6 col-md-4" data-choice="1">
+        <div class="col-sm-6 col-md-4 choice">
           <h2 class="sc-title">A1<br>Injection</h2>
         </div>
-        <div class="col-sm-6 col-md-4" data-choice="2">
+        <div class="col-sm-6 col-md-4 choice">
           <h2 class="sc-title">A2<br>Broken Authentication and Session Management</h2>
         </div>
-        <div class="col-sm-6 col-md-4" data-choice="3">
+        <div class="col-sm-6 col-md-4 choice">
           <h2 class="sc-title">A3<br>Cross-Site Scripting (XSS)</h2>
         </div>
-        <div class="col-sm-6 col-md-4" data-choice="4">
+        <div class="col-sm-6 col-md-4 choice">
           <h2 class="sc-title">A4<br>Broken Access Control</h2>
         </div>
-        <div class="col-sm-6 col-md-4" data-choice="5">
+        <div class="col-sm-6 col-md-4 choice">
           <h2 class="sc-title">A5<br>Security Misconfiguration</h2>
         </div>
-        <div class="col-sm-6 col-md-4" data-choice="6">
+        <div class="col-sm-6 col-md-4 choice">
           <h2 class="sc-title">A6<br>Sensitive Data Exposure</h2>
         </div>
-        <div class="col-sm-6 col-md-4" data-choice="7">
+        <div class="col-sm-6 col-md-4 choice">
           <h2 class="sc-title">A7<br>Insufficient Attack Protection</h2>
         </div>
-        <div class="col-sm-6 col-md-4" data-choice="8">
+        <div class="col-sm-6 col-md-4 choice">
           <h2 class="sc-title">A8<br>Cross-Site Request Forgery (CSRF)</h2>
         </div>
-        <div class="col-sm-6 col-md-4" data-choice="9">
+        <div class="col-sm-6 col-md-4 choice">
           <h2 class="sc-title">A9<br>Using Components with Known Vulnerabilities</h2>
         </div>
-        <div class="col-sm-6 col-md-4" data-choice="10">
+        <div class="col-sm-6 col-md-4 choice">
           <h2 class="sc-title">A10<br>Underprotected APIs</h2>
         </div>
-        <div class="col-sm-6 col-md-4" data-choice="11">
+        <div class="col-sm-6 col-md-4 choice">
           <h2 class="sc-title">A11<br>Unvalidated Redirects and Forwards</h2>
         </div>
-        <div class="col-sm-6 col-md-4" data-choice="12">
+        <div class="col-sm-6 col-md-4 choice">
           <h2 class="sc-title">A12<br>Malicious Files</h2>
         </div>
       </div>
@@ -70,6 +70,11 @@
     <div class="container" id="quizz">
       <h1 class="sc-title"></h1>
       <div id="questions"></div>
+    </div>
+    <div id="scroll">
+      <button type="button" class="btn btn-info btn-lg">
+        <span class="glyphicon glyphicon-chevron-up"></span>
+      </button>
     </div>
     <div id="validate">
       <button type="button" class="btn btn-success btn-lg">
