@@ -15,87 +15,18 @@ const quizzState = {
   nanswers : 0
 }
 
-const template = [
-  { "question" : "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-    "explanation" : "Yeah",
-    "answers": 1,
-    "choices" : [
-      "Curabitur pharetra libero non erat lacinia pharetra.",
-      "Quisque bibendum quam ut nisi tempus dictum.",
-      "Quisque a purus elementum, porttitor est vitae, facilisis turpis."
-    ] },
-  { "question" : "Curabitur vulputate velit porttitor nulla congue consectetur.",
-    "explanation" : "Yeah",
-    "answers": 1,
-    "choices" : [
-      "Pellentesque ac diam ornare, efficitur dui consectetur, venenatis felis.",
-      "Vivamus luctus ligula quis felis viverra, vitae vehicula eros viverra.",
-      "Pellentesque ac diam ornare, efficitur dui consectetur, venenatis felis.",
-      "In nec nulla blandit magna tincidunt auctor."
-    ] },
-  { "question" : "Curabitur vulputate velit porttitor nulla congue consectetur.",
-    "explanation" : "Yeah",
-    "answers": 1,
-    "choices" : [
-      "Pellentesque ac diam ornare, efficitur dui consectetur, venenatis felis.",
-      "Vivamus luctus ligula quis felis viverra, vitae vehicula eros viverra.",
-      "In nec nulla blandit magna tincidunt auctor."
-    ] }
+const doneMsgs = [
+  "Bien joué :)", "Pas mal !", "Bonne réponse :D"
 ]
 
-const quizzs = [
-  [
-    {
-      "question": "Laquelle de ces affirmations est fausse ?",
-      "explanation": "Il est possible d'exécuter du code à distance grâce à un fichier XML malveillant (XML eXternal Entity, ou XXE).",
-      "answers": 1,
-      "choices": [
-        "Un attaquant peut exécuter du code à distance avec une injection sur le SGDB NoSQL.",
-        "Un fichier XML fourni par l'utilisateur n'est pas spécialement dangereux.",
-        "Un attaquant découvrant une injection SQL peut être en mesure d'écrire des fichiers sur le système."
-      ]
-    },
-    {
-      "question": "<img src='injection.png' width='100%' alt='Injection'><br>Quelle vulnérabilité est présente dans ce code ?",
-      "explanation": "Il ne s'agit pas d'une XSS car le header Content-Type indique qu'il s'agit d'un fichier texte brut. On peut en revanche injecter des headers lors de l'appel de la fonction header().",
-      "answers": 1,
-      "choices": [
-        "Header injection.",
-         "Cross-Site Scripting (XSS).",
-         "SQL injection."
-       ]
-     }
-  ],
-  [
-    {
-      "question": "Choose A and B",
-      "explanation": "Well done.",
-      "answers": 2,
-      "choices": [
-        "A", "B", "C"
-      ]
-    }
-  ],
-  [
-    { "question": "Quelle action est impossible à effectuer avec une XSS ?",
-      "explanation": null,
-      "answers": 1,
-      "choices": [
-        "Injecter du code PHP pour exécuter des commandes sur le serveur",
-        "Faire du phishing afin de récupérer le mot de passe",
-        "Voler le compte de l'utilisateur grâce à ses cookies"
-      ] }
-  ],
-  template,
-  template,
-  template,
-  template,
-  template,
-  template,
-  template,
-  template,
-  template
-];
+var quizzs = null;
+$.ajax({
+  url: "questions.json",
+  dataType: "json",
+  success: function(data) {
+    quizzs = data;
+  }
+});
 
 function getQuizz(el)
 {
@@ -191,14 +122,14 @@ function validateQuizz(event)
 
   $("div#quizz div#questions div.col-md-6").each(function() {
     var $this = $(this);
-    if ($this.hasClass("answered"))
-      return;
     var question = getQuestion($this);
     if (question === null)
     {
       console.log("wth");
       return;
     }
+    if ($this.find("div.alert-info").length === 1)
+      return;
     var hasErrors = ($this.find("ul li.list-group-item-danger").length !== 0);
 
     $this.find("ul li.active").each(function() {
@@ -227,18 +158,20 @@ function validateQuizz(event)
     if (!hasErrors &&
         $this.find("ul li.list-group-item-success").length === question.answers)
     {
-      $this.addClass("answered");
-      if (question["explanation"] !== null)
+      let explanation =
+        question["explanation"] ||
+        doneMsgs[Math.floor(Math.random() * doneMsgs.length)];
+      if (explanation !== null)
       {
         $("<div class='alert alert-info'>")
-          .text(question["explanation"])
+          .text(explanation)
           .insertBefore($this.find("ul"));
       }
       $this.find("ul li").unbind("click");
     }
   });
 
-  if ($("div#quizz div#questions div.answered").length === quizzState.quizz.length)
+  if ($("div#questions div.col-md-6 div.alert-info").length === quizzState.quizz.length)
   {
     $("div#scroll").fadeIn(ANIM_DURATION);
     $("div#validate").fadeOut(ANIM_DURATION);
