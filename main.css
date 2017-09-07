@@ -29,11 +29,16 @@ div#quizz div#questions ul li:not(.active):hover {
   background: #eee;
 }
 div#validate, div#scroll {
+  opacity: 0.5;
+  transition: opacity 0.25s linear;
   display: none;
   bottom: 0;
   position: fixed;
   z-index: 1337;
   margin: 10px;
+}
+div#validate:hover, div#scroll:hover {
+  opacity: 0.8;
 }
 div#validate {
   right: 0;
