@@ -61,7 +61,7 @@ function getQuizz(el)
 
   generated += '</div>';
 
-  $("div#validate").fadeOut(ANIM_DURATION);
+  $("div#validate, div#scroll").fadeOut(ANIM_DURATION);
   $("div#quizz h1.sc-title").html($(this).children("h2").html());
   $("div#quizz div#questions").html(generated);
   $("div#quizz div#questions ul li").click(clickChoice);
