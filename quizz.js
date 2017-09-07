@@ -1,8 +1,8 @@
 Array.prototype.shuffle = function() {
-  for (let i = this.length; i > 0; --i)
+  for (var i = this.length; i > 0; --i)
   {
-    let j = Math.floor(Math.random() * i);
-    let x = this[i - 1];
+    var j = Math.floor(Math.random() * i);
+    var x = this[i - 1];
     this[i - 1] = this[j];
     this[j] = x;
   }
@@ -21,7 +21,7 @@ const doneMsgs = [
 
 function getQuizz(el)
 {
-  let quizzId = /^A([1-9]\d*)<br>/.exec($(this).children("h2").html())[1];
+  var quizzId = /^A([1-9]\d*)<br>/.exec($(this).children("h2").html())[1];
   quizzState.quizz = quizzs[parseInt(quizzId) - 1];
   $("div#winmsg").fadeOut(ANIM_DURATION);
   quizzState.nanswers = 0;
@@ -36,7 +36,7 @@ function getQuizz(el)
                     </h2>\
                     <ul class="list-group">';
 
-    let choices = question["choices"];
+    var choices = question["choices"];
     var genchoices = [];
     question["choices"].forEach(function(choice, index) {
       genchoices.push('<li class="list-group-item">\
@@ -64,13 +64,13 @@ function getQuizz(el)
 
 function getQuestion(div)
 {
-  let match = /^\s*Question ([1-9]\d*)<br>/.exec($(div).children("h2").html());
+  var match = /^\s*Question ([1-9]\d*)<br>/.exec($(div).children("h2").html());
   if (!match)
   {
     console.error("wat");
     return null;
   }
-  let index = parseInt(match[1]);
+  var index = parseInt(match[1]);
   if (index > quizzState.quizz.length)
   {
     console.log("uh");
@@ -89,7 +89,7 @@ function setActive(choice, isActive)
 
 function clickChoice()
 {
-  let isActive = ($(this).hasClass("active") || $(this).hasClass("list-group-item-danger"));
+  var isActive = ($(this).hasClass("active") || $(this).hasClass("list-group-item-danger"));
   $(this).parent().children("li.list-group-item-danger").each(function() {
     setActive(this, false);
   });
@@ -127,12 +127,12 @@ function validateQuizz(event)
       setActive(this, false);
 
       var isCorrect = false;
-      for (let i = 0; i < question.answers && !isCorrect; ++i)
+      for (var i = 0; i < question.answers && !isCorrect; ++i)
       {
         if ($(this).html().indexOf(question.choices[i]) != -1)
           isCorrect = true;
       }
-      let state = null;
+      var state = null;
       if (isCorrect)
       {
         state = "success";
@@ -149,7 +149,7 @@ function validateQuizz(event)
     if (!hasErrors &&
         $this.find("ul li.list-group-item-success").length === question.answers)
     {
-      let explanation =
+      var explanation =
         question["explanation"] ||
         doneMsgs[Math.floor(Math.random() * doneMsgs.length)];
       if (explanation !== null)
