@@ -19,15 +19,6 @@ const doneMsgs = [
   "Bien joué :)", "Pas mal !", "Bonne réponse :D"
 ]
 
-var quizzs = null;
-$.ajax({
-  url: "questions.json",
-  dataType: "json",
-  success: function(data) {
-    quizzs = data;
-  }
-});
-
 function getQuizz(el)
 {
   let quizzId = /^A([1-9]\d*)<br>/.exec($(this).children("h2").html())[1];
@@ -38,12 +29,12 @@ function getQuizz(el)
   var generated = '<div class="row">';
 
   quizzState.quizz.forEach(function(question, index) {
-      generated += '<div class="col-md-6">\
-                      <h2 class="sc-title">\
-                        Question ' + (index + 1) + '<br>\
-                        ' + question["question"] + '\
-                      </h2>\
-                      <ul class="list-group">';
+    generated += '<div class="col-md-6">\
+                    <h2 class="sc-title">\
+                      Question ' + (index + 1) + '<br>\
+                      ' + question["question"] + '\
+                    </h2>\
+                    <ul class="list-group">';
 
     let choices = question["choices"];
     var genchoices = [];
